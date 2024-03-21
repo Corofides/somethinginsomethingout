@@ -8,7 +8,51 @@ import "CoreLibs/object"
 import "CoreLibs/graphics"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
+import "event"
+import "listener"
+import "eventEmitter"
+
+local pd <const> = playdate;
+local inputEmitter = EventEmitter();
+inputEmitter:addListener(Listener())
 
 function playdate.update()
    --- Main Game Loop
+
+   if (pd.buttonIsPressed(pd.kButtonDown)) then
+      inputEmitter:emitEvent("kButtonDownIn")
+   else
+      inputEmitter:emitEvent("kButtonDownOut")
+   end
+
+   if (pd.buttonIsPressed(pd.kButtonUp)) then
+      inputEmitter:emitEvent("kButtonUpIn")
+   else
+      inputEmitter:emitEvent("kButtonUpOut")
+   end
+
+   if (pd.buttonIsPressed(pd.kButtonLeft)) then
+      inputEmitter:emitEvent("kButtonLeftIn")
+   else
+      inputEmitter:emitEvent("kButtonLeftOut")
+   end
+
+   if (pd.buttonIsPressed(pd.kButtonRight)) then
+      inputEmitter:emitEvent("kButtonRightIn")
+   else
+      inputEmitter:emitEvent("kButtonRightOut")
+   end
+
+   if (pd.buttonIsPressed(pd.kButtonA)) then
+      inputEmitter:emitEvent("kButtonAIn")
+   else
+      inputEmitter:emitEvent("kButtonAOut")
+   end
+
+   if (pd.buttonIsPressed(pd.kButtonB)) then
+      inputEmitter:emitEvent("kButtonBIn")
+   else
+      inputEmitter:emitEvent("kButtonBOut")
+   end
+
 end
