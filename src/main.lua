@@ -11,10 +11,29 @@ import "CoreLibs/timer"
 import "event"
 import "listener"
 import "eventEmitter"
+import "inputController"
 
 local pd <const> = playdate;
-local inputEmitter = EventEmitter();
-inputEmitter:addListener(Listener())
+
+local inputListener = Listener()
+local inputEmitter = EventEmitter()
+local controllerEmitter = EventEmitter()
+
+local aInputController = InputController("a", "kButtonA", controllerEmitter)
+local bInputController = InputController("b", "kButtonB", controllerEmitter)
+local upInputController = InputController("up", "kButtonUp", controllerEmitter)
+local downInputController = InputController("down", "kButtonDown", controllerEmitter)
+local leftInputController = InputController("left", "kButtonLeft", controllerEmitter)
+local rightInputController = InputController("right", "kButtonRight", controllerEmitter)
+
+controllerEmitter:addListener(inputListener)
+
+inputEmitter:addListener(aInputController)
+inputEmitter:addListener(bInputController)
+inputEmitter:addListener(upInputController)
+inputEmitter:addListener(downInputController)
+inputEmitter:addListener(leftInputController)
+inputEmitter:addListener(rightInputController)
 
 function playdate.update()
    --- Main Game Loop
