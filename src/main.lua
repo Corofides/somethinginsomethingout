@@ -12,8 +12,10 @@ import "event"
 import "listener"
 import "eventEmitter"
 import "inputController"
+import "button"
 
-local pd <const> = playdate;
+local pd <const> = playdate
+local gfx <const> = pd.graphics
 
 local inputListener = Listener()
 local inputEmitter = EventEmitter()
@@ -28,6 +30,41 @@ local rightInputController = InputController("right", "kButtonRight", controller
 
 controllerEmitter:addListener(inputListener)
 
+local buttonListener = Listener();
+
+local buttonEmitter = EventEmitter();
+
+local button = Button(100, 90, 100, 50, "Start Game", controllerEmitter)
+local button1 = Button(300, 90, 100, 50, "Start Game", controllerEmitter)
+local button2 = Button(100, 190, 100, 50, "Start Game", controllerEmitter)
+local button3 = Button(300, 190, 100, 50, "Start Game", controllerEmitter)
+
+button1:triggerFocus(true);
+
+button2:triggerFocus(true);
+button2:triggerActive(true);
+
+buttonListener.onEvent = function(listener, event)
+   if (event.name == "downClick") then
+      button:triggerFocus(true)
+   end
+
+   if (event.name == "upClick") then
+      button:triggerFocus(false)
+   end
+
+   if (event.name == "aPress") then
+      button:triggerActive(true)
+   end
+
+   if (event.name == "aRelease") then
+      button:triggerActive(false);
+   end
+
+end
+
+controllerEmitter:addListener(buttonListener)
+
 inputEmitter:addListener(aInputController)
 inputEmitter:addListener(bInputController)
 inputEmitter:addListener(upInputController)
@@ -35,8 +72,12 @@ inputEmitter:addListener(downInputController)
 inputEmitter:addListener(leftInputController)
 inputEmitter:addListener(rightInputController)
 
+
+
 function playdate.update()
    --- Main Game Loop
+
+   gfx.sprite.update()
 
    if (pd.buttonIsPressed(pd.kButtonDown)) then
       inputEmitter:emitEvent("kButtonDownIn")
