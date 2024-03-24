@@ -13,6 +13,7 @@ import "listener"
 import "eventEmitter"
 import "inputController"
 import "button"
+import "view"
 
 local pd <const> = playdate
 local gfx <const> = pd.graphics
@@ -28,14 +29,28 @@ local downInputController = InputController("down", "kButtonDown", controllerEmi
 local leftInputController = InputController("left", "kButtonLeft", controllerEmitter)
 local rightInputController = InputController("right", "kButtonRight", controllerEmitter)
 
+local view = View("This is a view", {
+   left = 200,
+   top = 140,
+   borderTopWidth = 2,
+   borderBottomWidth = 2,
+   borderLeftWidth = 2,
+   borderRightWidth = 2,
+   paddingLeft = 10,
+   paddingRight = 10,
+   paddingTop = 10,
+   paddingBottom = 10,
+})
+view:drawView()
+
 controllerEmitter:addListener(inputListener)
 
 local buttonListener = Listener();
 
 local buttonEmitter = EventEmitter();
 
-local button = Button(100, 90, 100, 50, "Start Game", controllerEmitter)
-local button1 = Button(300, 90, 100, 50, "Start Game", controllerEmitter)
+--[[ local button = Button(100, 90, 100, 50, "Start Game", controllerEmitter)
+ local button1 = Button(300, 90, 100, 50, "Start Game", controllerEmitter)
 local button2 = Button(100, 190, 100, 50, "Start Game", controllerEmitter)
 local button3 = Button(300, 190, 100, 50, "Start Game", controllerEmitter)
 
@@ -64,6 +79,8 @@ buttonListener.onEvent = function(listener, event)
 end
 
 controllerEmitter:addListener(buttonListener)
+
+--]]
 
 inputEmitter:addListener(aInputController)
 inputEmitter:addListener(bInputController)
