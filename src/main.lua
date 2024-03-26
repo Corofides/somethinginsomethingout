@@ -29,7 +29,85 @@ local downInputController = InputController("down", "kButtonDown", controllerEmi
 local leftInputController = InputController("left", "kButtonLeft", controllerEmitter)
 local rightInputController = InputController("right", "kButtonRight", controllerEmitter)
 
-local view = View("This is a view", {
+function is_array(table)
+
+   local is_array = true;
+
+   for key, value in pairs(table) do
+      if type(key) == "string" then
+         is_array = false
+         break
+      end
+   end
+
+   return is_array
+
+end
+
+
+print(test)
+
+local innerView = View("Test", {
+   left = 200,
+   top = 140,
+   borderTopWidth = 2,
+   borderBottomWidth = 2,
+   borderLeftWidth = 2,
+   borderRightWidth = 2,
+   paddingLeft = 10,
+   paddingRight = 10,
+   paddingTop = 10,
+   paddingBottom = 10,
+   marginTop = -5,
+   marginLeft = -5,
+})
+
+local view = View(innerView, {
+   left = 200,
+   top = 140,
+   borderTopWidth = 2,
+   borderBottomWidth = 2,
+   borderLeftWidth = 2,
+   borderRightWidth = 2,
+   paddingLeft = 10,
+   paddingRight = 10,
+   paddingTop = 10,
+   paddingBottom = 10,
+})
+
+local view = View(
+        {
+           View("Item 1", {
+              borderTopWidth = 2,
+              borderBottomWidth = 2,
+              borderLeftWidth = 2,
+              borderRightWidth = 2,
+              paddingLeft = 10,
+              paddingRight = 10,
+              paddingTop = 10,
+              paddingBottom = 10
+           }),
+           View("Item 2", {
+            borderTopWidth = 2,
+            borderBottomWidth = 2,
+            borderLeftWidth = 2,
+            borderRightWidth = 2,
+            paddingLeft = 10,
+            paddingRight = 10,
+            paddingTop = 10,
+            paddingBottom = 10
+            }),
+           View("Item 3", {
+              borderTopWidth = 2,
+              borderBottomWidth = 2,
+              borderLeftWidth = 2,
+              borderRightWidth = 2,
+              paddingLeft = 10,
+              paddingRight = 10,
+              paddingTop = 10,
+              paddingBottom = 10
+           })
+        }, {
    left = 200,
    top = 140,
    borderTopWidth = 2,

@@ -34,7 +34,29 @@ function View:init(content, params)
 
 end
 
-function View:getHeight()
+function View:getOuterHeight()
+
+    local height = self:getInnerHeight();
+
+    height = height + self.params.marginTop;
+    height = height + self.params.marginBottom;
+
+    return height;
+
+end
+
+function View:getOuterWidth()
+
+    local width = self:getInnerWidth()
+
+    width = width + self.params.marginLeft
+    width = width + self.params.marginRight
+
+    return width;
+
+end
+
+function View:getInnerHeight()
 
     local height = 0
 
@@ -43,14 +65,28 @@ function View:getHeight()
     height = height + self.params.paddingTop
     height = height + self.params.paddingBottom
 
-    --- Just assume content will be text for now.
-    local font <const> = gfx.getFont()
-    height = height + font:getHeight()
+    if (type(self.content) == "table") then
+
+        if (is_array(self.content)) then
+
+            for key, value in pairs(self.content) do
+                height = height + value:getOuterHeight()
+            end
+
+        else
+            height = height + self.content:getHeight();
+        end
+    end
+
+    if (type(self.content) == "string") then
+        local font <const> = gfx.getFont()
+        height = height + font:getHeight()
+    end
 
     return height
 end
 
-function View:getWidth()
+function View:getInnerWidth()
 
     local width = 0
 
@@ -59,17 +95,43 @@ function View:getWidth()
     width = width + self.params.paddingLeft
     width = width + self.params.paddingRight
 
-    --- Just assume content will be text for now.
-    local font <const> = gfx.getFont()
-    width = width + font:getTextWidth(self.content)
+    -- Assume view for now
+    if (type(self.content) == "table") then
+
+        if (is_array(self.content)) then
+
+            local maxWidth = 0
+
+            for key, value in pairs(self.content) do
+
+                local outerWidth <const> = value:getOuterWidth()
+
+                if outerWidth > maxWidth then
+                    maxWidth = outerWidth
+                end
+
+            end
+
+            width = width + maxWidth
+            -- Do stuff
+        else
+            width = width + self.content:getWidth();
+        end
+
+    end
+
+    if (type(self.content) == "string") then
+        local font <const> = gfx.getFont()
+        width = width + font:getTextWidth(self.content)
+    end
 
     return width
 end
 
 function View:drawView()
 
-    local width <const> = self:getWidth()
-    local height <const> = self:getHeight()
+    local width <const> = self:getInnerWidth()
+    local height <const> = self:getInnerHeight()
 
     local contentPositionLeft = self.params.borderLeftWidth + self.params.paddingLeft;
     local contentPositionTop = self.params.borderTopWidth + self.params.paddingTop;
@@ -94,7 +156,33 @@ function View:drawView()
         gfx.fillRect(width - self.params.borderRightWidth, 0, width, height)
     end
 
-    gfx.drawText(self.content, contentPositionLeft, contentPositionTop)
+    --- print(type(self.content))
+
+    --- let's just assume it's a view for now
+    if (type(self.content) == "table") then
+
+        if (is_array(self.content)) then
+
+            local positionX = self.params.left + self.params.borderLeftWidth + self.params.paddingLeft;
+            local positionY = self.params.top + self.params.borderTopWidth + self.params.paddingTop;
+
+            for key, value in pairs(self.content) do
+
+                value:setParam("top", positionY)
+                value:setParam("left", positionX)
+
+                value:drawView()
+            end
+        else
+            self.content:drawView();
+        end
+
+    end
+
+    if (type(self.content) == "string") then
+        gfx.drawText(self.content, contentPositionLeft, contentPositionTop)
+    end
+
     gfx.popContext()
 
     local topPosition = self.params.top + self.params.marginTop
@@ -130,8 +218,10 @@ function View:inflateParams(params)
 
 end
 
+function View:setParam(name, value)
+    self.params[name] = value;
+end
+
 function View:getParams()
-
     return self.params;
-
 end
