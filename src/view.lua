@@ -12,6 +12,7 @@ class("View").extends(gfx.sprite)
 function View:init(content, params)
 
     self._defaultParams = {
+        width = "auto",
         borderTopWidth = 0,
         borderBottomWidth = 0,
         borderLeftWidth = 0,
@@ -72,6 +73,7 @@ function View:getInnerHeight()
 
             for key, value in pairs(self.content) do
                 height = height + value:getOuterHeight()
+                height = height - self:getBorderCollapseOffset("vertical", key)
             end
 
         else
@@ -90,6 +92,14 @@ end
 function View:getInnerWidth()
 
     local width = 0
+
+    print("Type of Width", type(self.params.width));
+
+    if (type(self.params.width) == "number") then
+        return self.params.width;
+    end
+
+    --- do the other stuff
 
     width = width + self.params.borderLeftWidth
     width = width + self.params.borderRightWidth
@@ -125,6 +135,8 @@ function View:getInnerWidth()
         local font <const> = gfx.getFont()
         width = width + font:getTextWidth(self.content)
     end
+
+    print("Width", width)
 
     return width
 end
@@ -181,6 +193,26 @@ function View:getBorderCollapseOffset(direction, key)
 
 end
 
+function View:setChildInnerViewWidth(isMultiple)
+
+    if (not isMultiple) then
+
+        if (self.content.params.width == "100%") then
+            self.content:setParam("width", self:getInnerWidth())
+        end
+
+    end
+
+    for key, value in pairs(self.content) do
+
+        if (value.params.width == "100%") then
+            self.content.setParam("width", self:getInnerWidth())
+        end
+
+    end
+
+end
+
 function View:drawArrayOfViews(contentPositionLeft, contentPositionTop)
 
     local positionX = self.params.left + self.params.borderLeftWidth + self.params.paddingLeft;
@@ -188,10 +220,22 @@ function View:drawArrayOfViews(contentPositionLeft, contentPositionTop)
 
     for key, value in pairs(self.content) do
 
+        local isPercent = false
         value:setParam("top", positionY)
         value:setParam("left", positionX)
 
+        if (value.params.width == "100%") then
+            value.params.width = self:getInnerWidth() - self.params.borderLeftWidth - self.params.borderRightWidth
+                - self.params.paddingLeft - self.params.paddingRight
+
+            isPercent = true;
+        end
+
         value:drawView()
+
+        if (isPercent) then
+            value.params.width = "100%"
+        end
 
         positionY = positionY + value:getOuterHeight()
         positionY = positionY - self:getBorderCollapseOffset("vertical", key);

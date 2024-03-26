@@ -77,6 +77,7 @@ local view = View(innerView, {
 
 local childViewArray <const> = {
    View("Item 1", {
+      width = "100%",
       borderTopWidth = 2,
       borderBottomWidth = 2,
       borderLeftWidth = 2,
@@ -87,6 +88,7 @@ local childViewArray <const> = {
       paddingBottom = 10
    }),
    View("Item 2", {
+      width = "100%",
       borderTopWidth = 2,
       borderBottomWidth = 2,
       borderLeftWidth = 2,
@@ -97,6 +99,7 @@ local childViewArray <const> = {
       paddingBottom = 10
    }),
    View("Item 3", {
+      width = "100%",
       borderTopWidth = 2,
       borderBottomWidth = 2,
       borderLeftWidth = 2,
