@@ -108,8 +108,8 @@ local view = View(
               paddingBottom = 10
            })
         }, {
-   left = 200,
-   top = 140,
+   left = 1,
+   top = 1,
    borderTopWidth = 2,
    borderBottomWidth = 2,
    borderLeftWidth = 2,

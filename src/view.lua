@@ -128,17 +128,10 @@ function View:getInnerWidth()
     return width
 end
 
-function View:drawView()
+function View:drawBorders()
 
     local width <const> = self:getInnerWidth()
     local height <const> = self:getInnerHeight()
-
-    local contentPositionLeft = self.params.borderLeftWidth + self.params.paddingLeft;
-    local contentPositionTop = self.params.borderTopWidth + self.params.paddingTop;
-
-    local viewImage = gfx.image.new(width, height);
-
-    gfx.pushContext(viewImage)
 
     if (self.params.borderTopWidth > 0) then
         gfx.fillRect(0, 0, width, self.params.borderTopWidth)
@@ -156,38 +149,65 @@ function View:drawView()
         gfx.fillRect(width - self.params.borderRightWidth, 0, width, height)
     end
 
-    --- print(type(self.content))
+end
 
-    --- let's just assume it's a view for now
-    if (type(self.content) == "table") then
+function View:drawArrayOfViews(contentPositionLeft, contentPositionTop)
 
-        if (is_array(self.content)) then
+    local positionX = self.params.left + self.params.borderLeftWidth + self.params.paddingLeft;
+    local positionY = self.params.top + self.params.borderTopWidth + self.params.paddingTop;
 
-            local positionX = self.params.left + self.params.borderLeftWidth + self.params.paddingLeft;
-            local positionY = self.params.top + self.params.borderTopWidth + self.params.paddingTop;
+    for key, value in pairs(self.content) do
 
-            for key, value in pairs(self.content) do
+        value:setParam("top", positionY)
+        value:setParam("left", positionX)
 
-                value:setParam("top", positionY)
-                value:setParam("left", positionX)
+        value:drawView()
 
-                value:drawView()
-            end
-        else
-            self.content:drawView();
-        end
-
+        positionY = positionY + value:getOuterHeight()
     end
+
+end
+
+function View:drawInnerContent()
+
+    local contentPositionLeft = self.params.borderLeftWidth + self.params.paddingLeft;
+    local contentPositionTop = self.params.borderTopWidth + self.params.paddingTop;
 
     if (type(self.content) == "string") then
         gfx.drawText(self.content, contentPositionLeft, contentPositionTop)
+        return;
     end
+
+    if (type(self.content) == "table") then
+
+        if (not is_array(self.content)) then
+            self.content:drawView();
+        end
+
+        self:drawArrayOfViews(contentPositionLeft, contentPositionTop)
+
+    end
+
+end
+
+function View:drawView()
+
+    local width <const> = self:getInnerWidth()
+    local height <const> = self:getInnerHeight()
+
+    local viewImage = gfx.image.new(width, height);
+
+    gfx.pushContext(viewImage)
+
+    self:drawBorders()
+    self:drawInnerContent()
 
     gfx.popContext()
 
     local topPosition = self.params.top + self.params.marginTop
     local leftPosition = self.params.left + self.params.marginLeft
 
+    self:setCenter(0, 0)
     self:setImage(viewImage)
     self:moveTo(leftPosition, topPosition)
     self:add()
