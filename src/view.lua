@@ -16,6 +16,7 @@ function View:init(content, params)
         borderBottomWidth = 0,
         borderLeftWidth = 0,
         borderRightWidth = 0,
+        borderCollapse = false,
         paddingTop = 0,
         paddingLeft = 0,
         paddingBottom = 0,
@@ -151,6 +152,35 @@ function View:drawBorders()
 
 end
 
+function View:getBorderCollapseOffset(direction, key)
+
+    if (not self.params.borderCollapse) then
+        return 0
+    end
+
+    if (key == #self.content) then
+        return 0
+    end
+
+    local currentBorderProperty = "borderBottomWidth"
+    local nextBorderProperty = "borderTopWidth"
+
+    if (direction == "horizontal") then
+        currentBorderProperty = "borderRightWidth"
+        nextBorderProperty = "borderLeftWidth"
+    end
+
+    local nextChildTopBorderWidth = self.content[key].params[nextBorderProperty]
+    local smallestBorderWidth = self.params[currentBorderProperty]
+
+    if (nextChildTopBorderWidth < smallestBorderWidth) then
+        smallestBorderWidth = nextChildTopBorderWidth
+    end
+
+    return smallestBorderWidth
+
+end
+
 function View:drawArrayOfViews(contentPositionLeft, contentPositionTop)
 
     local positionX = self.params.left + self.params.borderLeftWidth + self.params.paddingLeft;
@@ -164,6 +194,8 @@ function View:drawArrayOfViews(contentPositionLeft, contentPositionTop)
         value:drawView()
 
         positionY = positionY + value:getOuterHeight()
+        positionY = positionY - self:getBorderCollapseOffset("vertical", key);
+
     end
 
 end

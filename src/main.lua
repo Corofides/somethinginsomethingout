@@ -75,41 +75,43 @@ local view = View(innerView, {
    paddingBottom = 10,
 })
 
-local view = View(
-        {
-           View("Item 1", {
-              borderTopWidth = 2,
-              borderBottomWidth = 2,
-              borderLeftWidth = 2,
-              borderRightWidth = 2,
-              paddingLeft = 10,
-              paddingRight = 10,
-              paddingTop = 10,
-              paddingBottom = 10
-           }),
-           View("Item 2", {
-            borderTopWidth = 2,
-            borderBottomWidth = 2,
-            borderLeftWidth = 2,
-            borderRightWidth = 2,
-            paddingLeft = 10,
-            paddingRight = 10,
-            paddingTop = 10,
-            paddingBottom = 10
-            }),
-           View("Item 3", {
-              borderTopWidth = 2,
-              borderBottomWidth = 2,
-              borderLeftWidth = 2,
-              borderRightWidth = 2,
-              paddingLeft = 10,
-              paddingRight = 10,
-              paddingTop = 10,
-              paddingBottom = 10
-           })
-        }, {
+local childViewArray <const> = {
+   View("Item 1", {
+      borderTopWidth = 2,
+      borderBottomWidth = 2,
+      borderLeftWidth = 2,
+      borderRightWidth = 2,
+      paddingLeft = 10,
+      paddingRight = 10,
+      paddingTop = 10,
+      paddingBottom = 10
+   }),
+   View("Item 2", {
+      borderTopWidth = 2,
+      borderBottomWidth = 2,
+      borderLeftWidth = 2,
+      borderRightWidth = 2,
+      paddingLeft = 10,
+      paddingRight = 10,
+      paddingTop = 10,
+      paddingBottom = 10
+   }),
+   View("Item 3", {
+      borderTopWidth = 2,
+      borderBottomWidth = 2,
+      borderLeftWidth = 2,
+      borderRightWidth = 2,
+      paddingLeft = 10,
+      paddingRight = 10,
+      paddingTop = 10,
+      paddingBottom = 10
+   })
+}
+
+local view = View(childViewArray, {
    left = 1,
    top = 1,
+   borderCollapse = true,
    borderTopWidth = 2,
    borderBottomWidth = 2,
    borderLeftWidth = 2,
