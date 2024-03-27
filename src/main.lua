@@ -79,6 +79,8 @@ local childViewArray <const> = {
    View("Item 1", {
       width = "100%",
       borderTopWidth = 2,
+      borderTopLeftRadius = 15,
+      borderTopRightRadius = 15,
       borderBottomWidth = 2,
       borderLeftWidth = 2,
       borderRightWidth = 2,

@@ -17,6 +17,10 @@ function View:init(content, params)
         borderBottomWidth = 0,
         borderLeftWidth = 0,
         borderRightWidth = 0,
+        borderTopLeftRadius = 0,
+        borderTopRightRadius = 0,
+        borderBottomLeftRadius = 0,
+        borderBottomRightRadius = 0,
         borderCollapse = false,
         paddingTop = 0,
         paddingLeft = 0,
@@ -146,8 +150,10 @@ function View:drawBorders()
     local width <const> = self:getInnerWidth()
     local height <const> = self:getInnerHeight()
 
+    print("borderTopRightRadius", width, self.params.borderTopRightRadius)
+
     if (self.params.borderTopWidth > 0) then
-        gfx.fillRect(0, 0, width, self.params.borderTopWidth)
+        gfx.fillRect(self.params.borderTopLeftRadius, 0, width - self.params.borderTopRightRadius * 2, self.params.borderTopWidth)
     end
 
     if (self.params.borderBottomWidth > 0) then
@@ -155,11 +161,32 @@ function View:drawBorders()
     end
 
     if (self.params.borderLeftWidth > 0) then
-        gfx.fillRect(0, 0, self.params.borderLeftWidth, height)
+        gfx.fillRect(0, self.params.borderTopLeftRadius, self.params.borderLeftWidth, height)
+
+        --gfx.drawArc(self.params.borderTopLeftRadius, self.params.borderTopLeftRadius, self.params.borderTopLeftRadius, 270, 0)
+
+
+        if (self.params.borderTopLeftRadius > 0) then
+            for i=0,self.params.borderLeftWidth - 1, 1 do
+                print("I", i)
+                gfx.drawArc(self.params.borderTopLeftRadius, self.params.borderTopLeftRadius, self.params.borderTopLeftRadius - i, 270, 0)
+            end
+        end
+
+        --gfx.fillRect(20, self.params.borderTopLeftRadius, 21, self.params.borderTopLeftWidth + 1)
+        --gfx.drawArc(21, self.params.borderTopLeftRadius, self.params.borderTopLeftRadius, 270, 0)
+
     end
 
     if (self.params.borderRightWidth > 0) then
-        gfx.fillRect(width - self.params.borderRightWidth, 0, width, height)
+        gfx.fillRect(width - self.params.borderRightWidth, self.params.borderTopRightRadius, width, height)
+    end
+
+    if (self.params.borderTopRightRadius > 0) then
+        for i=1,self.params.borderRightWidth, 1 do
+           -- print("I", i)
+            -- gfx.drawArc((width - self.params.borderTopRightRadius) + i - 2, self.params.borderTopRightRadius + i, self.params.borderTopRightRadius, 0, 90)
+        end
     end
 
 end
