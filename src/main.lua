@@ -115,6 +115,39 @@ local childViewArray <const> = {
    })
 }
 
+local view = View(false, {
+   left = 240,
+   top = 100,
+   paddingLeft = 10,
+   paddingRight = 10,
+   paddingTop = 10,
+   paddingBottom = 10,
+   borderBottomRightRadius = 10,
+   borderTopLeftRadius = 10,
+   borderBottomLeftRadius = 10,
+   borderTopRightRadius = 10,
+   borderTopWidth = 2,
+   borderBottomWidth = 2,
+   borderLeftWidth = 2,
+   borderRightWidth = 2,
+})
+view:drawView()
+
+local justABox = View(false, {
+   left = 100,
+   top = 100,
+   paddingLeft = 20,
+   paddingRight = 20,
+   paddingBottom = 10,
+   paddingTop = 10,
+   borderTopWidth = 10,
+   borderBottomWidth = 10,
+   borderLeftWidth = 10,
+   borderRightWidth = 10,
+})
+justABox:drawView()
+
+
 local view = View(childViewArray, {
    left = 1,
    top = 1,
