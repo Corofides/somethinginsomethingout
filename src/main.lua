@@ -131,15 +131,19 @@ local view = View(false, {
    borderLeftWidth = 2,
    borderRightWidth = 2,
 })
-view:drawView()
+-- view:drawView()
 
 local justABox = View(false, {
-   left = 100,
-   top = 100,
+   left = 10,
+   top = 10,
    paddingLeft = 20,
    paddingRight = 20,
    paddingBottom = 10,
    paddingTop = 10,
+   -- borderTopColor = gfx.kColorWhite,
+   -- borderBottomColor = gfx.kColorWhite,
+   borderLeftColor = gfx.kColorWhite,
+   borderRightColor = gfx.kColorWhite,
    borderTopWidth = 10,
    borderBottomWidth = 10,
    borderLeftWidth = 10,
@@ -147,6 +151,132 @@ local justABox = View(false, {
 })
 justABox:drawView()
 
+local justABox = View(false, {
+   left = 80,
+   top = 10,
+   paddingLeft = 20,
+   paddingRight = 20,
+   paddingBottom = 10,
+   paddingTop = 10,
+   borderTopColor = gfx.kColorWhite,
+   borderBottomColor = gfx.kColorWhite,
+   -- borderLeftColor = gfx.kColorWhite,
+   -- borderRightColor = gfx.kColorWhite,
+   borderTopWidth = 10,
+   borderBottomWidth = 10,
+   borderLeftWidth = 10,
+   borderRightWidth = 10,
+})
+justABox:drawView()
+
+local justABox = View(false, {
+   left = 150,
+   top = 10,
+   paddingLeft = 30,
+   paddingRight = 30,
+   paddingBottom = 10,
+   paddingTop = 10,
+   borderTopWidth = 10,
+   borderBottomWidth = 10,
+   -- borderLeftWidth = 10,
+   -- borderRightWidth = 10,
+})
+justABox:drawView()
+
+local justABox = View(false, {
+   left = 220,
+   top = 10,
+   paddingLeft = 20,
+   paddingRight = 20,
+   paddingBottom = 20,
+   paddingTop = 20,
+   -- borderTopWidth = 10,
+   -- borderBottomWidth = 10,
+   borderLeftWidth = 10,
+   borderRightWidth = 10,
+})
+justABox:drawView()
+
+local justACircle = View(false, {
+   left = 10,
+   top = 100,
+   paddingLeft = 20,
+   paddingRight = 20,
+   paddingBottom = 20,
+   paddingTop = 20,
+   -- borderTopColor = gfx.kColorWhite,
+   -- borderBottomColor = gfx.kColorWhite,
+   borderLeftColor = gfx.kColorWhite,
+   borderRightColor = gfx.kColorWhite,
+   borderTopWidth = 10,
+   borderBottomWidth = 10,
+   borderLeftWidth = 10,
+   borderRightWidth = 10,
+   borderBottomLeftRadius = 30,
+   borderBottomRightRadius = 30,
+   borderTopLeftRadius = 30,
+   borderTopRightRadius = 30,
+
+})
+justACircle:drawView()
+
+local justACircle = View(false, {
+   left = 80,
+   top = 100,
+   paddingLeft = 20,
+   paddingRight = 20,
+   paddingBottom = 20,
+   paddingTop = 20,
+   borderTopColor = gfx.kColorWhite,
+   borderBottomColor = gfx.kColorWhite,
+   -- borderLeftColor = gfx.kColorWhite,
+   -- borderRightColor = gfx.kColorWhite,
+   borderTopWidth = 10,
+   borderBottomWidth = 10,
+   borderLeftWidth = 10,
+   borderRightWidth = 10,
+   borderBottomLeftRadius = 30,
+   borderBottomRightRadius = 30,
+   borderTopLeftRadius = 30,
+   borderTopRightRadius = 30,
+})
+justACircle:drawView()
+
+local justACircle = View(false, {
+   left = 150,
+   top = 100,
+   paddingLeft = 20,
+   paddingRight = 20,
+   paddingBottom = 20,
+   paddingTop = 20,
+   borderTopWidth = 10,
+   borderBottomWidth = 10,
+   borderLeftWidth = 10,
+   borderRightWidth = 10,
+   --borderBottomLeftRadius = 30,
+   borderBottomRightRadius = 30,
+   borderTopLeftRadius = 30,
+   --borderTopRightRadius = 30,
+})
+justACircle:drawView()
+
+local justACircle = View(false, {
+   left = 220,
+   top = 100,
+   paddingLeft = 20,
+   paddingRight = 20,
+   paddingBottom = 20,
+   paddingTop = 20,
+   borderTopWidth = 10,
+   borderBottomWidth = 10,
+   borderLeftWidth = 10,
+   borderRightWidth = 10,
+   borderBottomLeftRadius = 30,
+   -- borderBottomRightRadius = 30,
+   -- borderTopLeftRadius = 30,
+   borderTopRightRadius = 30,
+})
+justACircle:drawView()
 
 local view = View(childViewArray, {
    left = 1,
@@ -161,7 +291,7 @@ local view = View(childViewArray, {
    paddingTop = 10,
    paddingBottom = 10,
 })
-view:drawView()
+-- view:drawView()
 
 controllerEmitter:addListener(inputListener)
 

@@ -13,6 +13,10 @@ function View:init(content, params)
 
     self._defaultParams = {
         width = "auto",
+        borderTopColor = gfx.kColorBlack,
+        borderBottomColor = gfx.kColorBlack,
+        borderLeftColor = gfx.kColorBlack,
+        borderRightColor = gfx.kColorBlack,
         borderTopWidth = 0,
         borderBottomWidth = 0,
         borderLeftWidth = 0,
@@ -150,23 +154,185 @@ function View:_calculateBorderStartAndLength(initialLength, startBorderWidth, st
     local borderStart = 0;
     local borderLength = initialLength;
 
-    if (self.params.borderLeftWidth > 0) then
+    if (startBorderWidth) then
         borderStart = startBorderWidth
         borderLength = borderLength - startBorderWidth;
     end
 
-    if (self.params.borderTopLeftRadius > 0) then
+    if (startBorderRadius > 0) then
         borderStart = startBorderRadius
         borderLength = initialLength - startBorderRadius
     end
 
-    if (self.params.borderTopRightRadius > 0) then
+    if (endBorderRadius > 0) then
         borderLength = borderLength - endBorderRadius
     else
         borderLength = borderLength - endBorderWidth
     end
 
     return borderStart, borderLength
+
+end
+
+function View:_drawBorderRight()
+
+    local width <const> = self:getInnerWidth()
+    local height <const> = self:getInnerHeight()
+
+    if (self.params.borderRightWidth <= 0) then
+        return;
+    end
+
+    local oldColor = gfx.getColor()
+    gfx.setColor(self.params.borderRightColor)
+
+    if (self.params.borderRightWidth > 0) then
+        local borderStart, borderLength = self:_calculateBorderStartAndLength(height, self.params.borderTopWidth, self.params.borderTopRightRadius, self.params.borderBottomWidth, self.params.borderBottomRightRadius)
+        gfx.fillRect(width - self.params.borderRightWidth, borderStart, width, borderLength)
+    end
+
+    if (self.params.borderTopWidth > 0) then
+        if (self.params.borderTopRightRadius > 0) then
+            for i=0, self.params.borderRightWidth - 1, 1 do
+                gfx.drawArc((width - self.params.borderTopRightRadius), self.params.borderTopRightRadius, self.params.borderTopRightRadius - i, 45, 90)
+            end
+        else
+            gfx.fillTriangle(width, 0, width, self.params.borderTopWidth, width - self.params.borderRightWidth, self.params.borderTopWidth)
+        end
+    end
+
+    if (self.params.borderBottomWidth > 0) then
+        if (self.params.borderBottomRightRadius > 0) then
+            for i=0, self.params.borderRightWidth - 1, 1 do
+                gfx.drawArc((width - self.params.borderBottomRightRadius), height - self.params.borderBottomRightRadius, self.params.borderBottomRightRadius - i, 90, 135)
+            end
+        else
+            gfx.fillTriangle(width, height, width, height - self.params.borderBottomWidth, width - self.params.borderRightWidth, height - self.params.borderBottomWidth)
+        end
+    end
+
+    gfx.setColor(oldColor)
+
+end
+
+function View:_drawBorderLeft()
+
+    local width <const> = self:getInnerWidth()
+    local height <const> = self:getInnerHeight()
+
+    if (self.params.borderLeftWidth <= 0) then
+        return;
+    end
+
+    local oldColor = gfx.getColor();
+    gfx.setColor(self.params.borderLeftColor)
+
+    local borderStart, borderLength = self:_calculateBorderStartAndLength(height, self.params.borderTopWidth, self.params.borderTopLeftRadius, self.params.borderBottomWidth, self.params.borderBottomLeftRadius)
+    gfx.fillRect(0, borderStart, self.params.borderLeftWidth, borderLength)
+
+    if (self.params.borderTopWidth > 0) then
+
+        if (self.params.borderTopLeftRadius > 0) then
+            for i=0, self.params.borderLeftWidth - 1, 1 do
+                gfx.drawArc(self.params.borderTopLeftRadius, self.params.borderTopLeftRadius, self.params.borderTopLeftRadius - i, 270, 315)
+            end
+        else
+            gfx.fillTriangle(0, 0, 0, self.params.borderTopWidth, self.params.borderLeftWidth, self.params.borderTopWidth)
+        end
+
+    end
+
+    if (self.params.borderBottomWidth > 0) then
+        if (self.params.borderBottomLeftRadius > 0) then
+            for i=0, self.params.borderLeftWidth - 1 do
+                gfx.drawArc(self.params.borderBottomLeftRadius, height - self.params.borderBottomLeftRadius, self.params.borderBottomLeftRadius - i, 225, 270)
+            end
+        else
+            gfx.fillTriangle(0, height, 0,  height - self.params.borderBottomWidth, self.params.borderLeftWidth, height - self.params.borderBottomWidth)
+        end
+    end
+
+    gfx.setColor(oldColor)
+
+end
+
+function View:_drawBorderBottom()
+
+    local width <const> = self:getInnerWidth()
+    local height <const> = self:getInnerHeight()
+
+    if (self.params.borderBottomWidth <= 0) then
+        return;
+    end
+
+    local oldColor = gfx.getColor();
+    gfx.setColor(self.params.borderBottomColor)
+
+    local borderStart, borderLength = self:_calculateBorderStartAndLength(width, self.params.borderLeftWidth, self.params.borderBottomLeftRadius, self.params.borderRightWidth, self.params.borderBottomRightRadius)
+    gfx.fillRect(borderStart, height - self.params.borderBottomWidth, borderLength, self.params.borderBottomWidth)
+
+    if (self.params.borderLeftWidth > 0) then
+        if (self.params.borderBottomLeftRadius > 0) then
+            for i=0, self.params.borderBottomWidth - 1 do
+                gfx.drawArc(self.params.borderBottomLeftRadius, height - self.params.borderBottomLeftRadius, self.params.borderBottomLeftRadius - i, 180, 225)
+            end
+        else
+            gfx.fillTriangle(0, height, self.params.borderLeftWidth, height, self.params.borderLeftWidth, height - self.params.borderBottomWidth)
+        end
+    end
+
+    if (self.params.borderRightWidth > 0) then
+        if (self.params.borderBottomRightRadius > 0) then
+            for i=0, self.params.borderBottomWidth - 1, 1 do
+                gfx.drawArc((width - self.params.borderBottomRightRadius), height - self.params.borderBottomRightRadius, self.params.borderBottomRightRadius - i, 135, 188)
+            end
+        else
+            gfx.fillTriangle(width, height, width - self.params.borderRightWidth, height, width - self.params.borderRightWidth, height - self.params.borderBottomWidth);
+        end
+    end
+
+    gfx.setColor(oldColor)
+end
+
+function View:_drawBorderTop()
+
+    local width <const> = self:getInnerWidth()
+    local height <const> = self:getInnerHeight()
+
+    if (self.params.borderTopWidth <= 0) then
+        return;
+    end
+
+    local borderStart, borderLength = self:_calculateBorderStartAndLength(width, self.params.borderLeftWidth, self.params.borderTopLeftRadius, self.params.borderRightWidth, self.params.borderTopRightRadius)
+    local oldColor = gfx.getColor();
+
+    gfx.setColor(self.params.borderTopColor)
+    gfx.fillRect(borderStart, 0, borderLength, self.params.borderTopWidth)
+
+    if (self.params.borderLeftWidth > 0) then
+        if (self.params.borderTopLeftRadius > 0) then
+            for i = 0, self.params.borderTopWidth - 1, 1 do
+                gfx.drawArc(self.params.borderTopLeftRadius, self.params.borderTopLeftRadius, self.params.borderTopLeftRadius - i, 315, 0)
+            end
+        else
+            gfx.fillTriangle(0, 0, self.params.borderLeftWidth, 0, self.params.borderLeftWidth, self.params.borderTopWidth)
+        end
+    end
+
+    if (self.params.borderRightWidth > 0) then
+
+        if (self.params.borderTopRightRadius > 0) then
+            for i=0, self.params.borderTopWidth - 1, 1 do
+                gfx.drawArc((width - self.params.borderTopRightRadius), self.params.borderTopRightRadius, self.params.borderTopRightRadius - i, 0, 45)
+            end
+        else
+            gfx.fillTriangle(width, 0, width - self.params.borderRightWidth, 0, width - self.params.borderRightWidth, self.params.borderTopWidth)
+        end
+
+    end
+
+    gfx.setColor(oldColor)
+
 
 end
 
@@ -177,86 +343,48 @@ function View:drawBorders()
 
     print("borderTopRightRadius", width, self.params.borderTopRightRadius)
 
-    if (self.params.borderTopWidth > 0) then
+    self:_drawBorderTop()
+    self:_drawBorderBottom()
+    self:_drawBorderLeft()
+    self:_drawBorderRight()
 
-        local borderTopStart = 0;
-        local borderTopWidth = width;
-
-        if (self.params.borderLeftWidth > 0) then
-            borderTopStart = self.params.borderLeftWidth
-            borderTopWidth = width - self.params.borderLeftWidth;
-        end
-
-        if (self.params.borderTopLeftRadius > 0) then
-            borderTopStart = self.params.borderTopLeftRadius
-            borderTopWidth = width - self.params.borderTopLeftRadius
-        end
+    if (self.params.borderTopWidth > 0 and self.params.borderRightWidth > 0) then
 
         if (self.params.borderTopRightRadius > 0) then
-            borderTopWidth = borderTopWidth - self.params.borderTopRightRadius
+            -- Top Right - Top of Arc
+            --[[ for i=0, self.params.borderTopWidth - 1, 1 do
+                gfx.drawArc((width - self.params.borderTopRightRadius), self.params.borderTopRightRadius, self.params.borderTopRightRadius - i, 0, 45)
+            end ]]--
+            -- Top Right - Bottom of Arc
+            --[[ for i=0, self.params.borderRightWidth - 1, 1 do
+                gfx.drawArc((width - self.params.borderTopRightRadius), self.params.borderTopRightRadius, self.params.borderTopRightRadius - i, 45, 90)
+            end ]]--
         else
-            borderTopWidth = borderTopWidth - self.params.borderRightWidth
+            -- Border Top - Right
+            -- gfx.fillTriangle(width, 0, width - self.params.borderRightWidth, 0, width - self.params.borderRightWidth, self.params.borderTopWidth)
+            -- Border Right - Top
+            -- gfx.fillTriangle(width, 0, width, self.params.borderTopWidth, width - self.params.borderRightWidth, self.params.borderTopWidth)
         end
-
-        local borderStart, borderLength = self:_calculateBorderStartAndLength(width, self.params.borderLeftWidth, self.params.borderTopLeftRadius, self.params.borderRightWidth, self.params.borderTopRightRadius)
-        print("BorderStart", borderStart, "BorderWidth", borderWidth)
-
-        gfx.fillRect(borderStart, 0, borderLength, self.params.borderTopWidth)
     end
 
-    if (self.params.borderBottomWidth > 0) then
-        local borderStart, borderLength = self:_calculateBorderStartAndLength(width, self.params.borderLeftWidth, self.params.borderBottomLeftRadius, self.params.borderRightWidth, self.params.borderBottomRightRadius)
-        gfx.fillRect(borderStart, height - self.params.borderBottomWidth, borderLength, self.params.borderBottomWidth)
-    end
+    if (self.params.borderBottomWidth > 0 and self.params.borderRightWidth > 0) then
 
-    if (self.params.borderLeftWidth > 0) then
-        local borderStart, borderLength = self:_calculateBorderStartAndLength(height, self.params.borderTopWidth, self.params.borderTopLeftRadius, self.params.borderBottomWidth, self.params.borderBottomLeftRadius)
-        gfx.fillRect(0, borderStart, self.params.borderLeftWidth, borderLength)
-    end
-
-    if (self.params.borderRightWidth > 0) then
-        local borderStart, borderLength = self:_calculateBorderStartAndLength(height, self.params.borderTopWidth, self.params.borderTopRightRadius, self.params.borderBottomWidth, self.params.borderBottomRightRadius)
-        gfx.fillRect(width - self.params.borderRightWidth, borderStart, width, borderLength)
-    end
-
-    if (self.params.borderTopLeftRadius > 0) then
-        for i=0,self.params.borderLeftWidth - 1, 1 do
-            print("I", i)
-            gfx.drawArc(self.params.borderTopLeftRadius, self.params.borderTopLeftRadius, self.params.borderTopLeftRadius - i, 270, 0)
+        if (self.params.borderBottomRightRadius > 0) then
+            -- Bottom Right - Top of Arc
+            --[[ for i=0, self.params.borderRightWidth - 1, 1 do
+                gfx.drawArc((width - self.params.borderBottomRightRadius), height - self.params.borderBottomRightRadius, self.params.borderBottomRightRadius - i, 90, 135)
+            end ]]--
+            -- Bottom Right - Bottom of Arc
+            --[[for i=0, self.params.borderBottomWidth - 1, 1 do
+            --                gfx.drawArc((width - self.params.borderBottomRightRadius), height - self.params.borderBottomRightRadius, self.params.borderBottomRightRadius - i, 135, 188)
+            --            end
+            ]]--
+        else
+            -- Border Right - Bottom
+            -- gfx.fillTriangle(width, height, width, height - self.params.borderBottomWidth, width - self.params.borderRightWidth, height - self.params.borderBottomWidth)
+            -- Border Bottom - Right
+            -- gfx.fillTriangle(width, height, width - self.params.borderRightWidth, height, width - self.params.borderRightWidth, height - self.params.borderBottomWidth);
         end
-    elseif (self.params.borderTopWidth > 0 and self.params.borderLeftWidth > 0) then
-        gfx.fillTriangle(0, 0, self.params.borderLeftWidth, 0, self.params.borderLeftWidth, self.params.borderTopWidth)
-        gfx.fillTriangle(0, 0, 0, self.params.borderTopWidth, self.params.borderLeftWidth, self.params.borderTopWidth)
-    end
-
-    if (self.params.borderBottomLeftRadius > 0) then
-        for i=0,self.params.borderLeftWidth - 1, 1 do
-            print("I", i)
-            gfx.drawArc(self.params.borderBottomLeftRadius, height - self.params.borderBottomLeftRadius, self.params.borderBottomLeftRadius - i, 180, 270)
-        end
-    elseif (self.params.borderBottomWidth > 0 and self.params.borderLeftWidth > 0) then
-        gfx.fillTriangle(0, height, 0,  height - self.params.borderBottomWidth, self.params.borderLeftWidth, height - self.params.borderBottomWidth)
-        gfx.fillTriangle(0, height, self.params.borderLeftWidth, height, self.params.borderLeftWidth, height - self.params.borderBottomWidth)
-    end
-
-    if (self.params.borderTopRightRadius > 0) then
-        for i=0,self.params.borderRightWidth -1, 1 do
-            print("I", i)
-            gfx.drawArc((width - self.params.borderTopRightRadius), self.params.borderTopRightRadius, self.params.borderTopRightRadius - i, 0, 90)
-        end
-    elseif (self.params.borderTopWidth > 0 and self.params.borderRightWidth > 0) then
-        gfx.fillTriangle(width, 0, width - self.params.borderRightWidth, 0, width - self.params.borderRightWidth, self.params.borderTopWidth)
-        gfx.fillTriangle(width, 0, width, self.params.borderTopWidth, width - self.params.borderRightWidth, self.params.borderTopWidth)
-    end
-
-    if (self.params.borderBottomRightRadius > 0) then
-        for i=0,self.params.borderRightWidth -1, 1 do
-            print("I", i)
-            gfx.drawArc((width - self.params.borderBottomRightRadius), height - self.params.borderBottomRightRadius, self.params.borderBottomRightRadius - i, 90, 180)
-        end
-    elseif (self.params.borderBottomWidth > 0 and self.params.borderRightWidth > 0) then
-        gfx.fillTriangle(width, height, width, height - self.params.borderBottomWidth, width - self.params.borderRightWidth, height - self.params.borderBottomWidth)
-        gfx.fillTriangle(width, height, width - self.params.borderRightWidth, height, width - self.params.borderRightWidth, height - self.params.borderBottomWidth);
     end
 
 end
